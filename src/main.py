@@ -1,102 +1,64 @@
-import os
+import directory_setup
 import flet as ft
-from flet import (
-    ElevatedButton,
-    FilePicker,
-    FilePickerResultEvent,
-    Page,
-    Row,
-    Text,
-    icons,
-    Column,
-    Container,
-    colors,
-    border,
-    padding,
 
-)
+
+class AppTile(ft.ListTile):
+    def __init__(self, name, view, icon_name, file_name):
+        super().__init__()
+        self.view = view
+        self.bgcolor = ft.colors.SURFACE_VARIANT
+        self.title = ft.Text(name)
+        self.leading = ft.Icon(icon_name)
+        self.on_click = self.app_button_clicked
+        self.name = name
+        self.file_name = file_name
+
+    def app_button_clicked(self, e):
+        e.control.page.views.append(
+            ft.View(
+                controls=[
+                    ft.AppBar(
+                        title=ft.Text(f"{e.control.name}"),
+                        actions=[
+                            ft.IconButton(
+                                content=ft.Image(
+                                    src="github-mark.svg", width=24, height=24
+                                ),
+                                url=f"https://github.com/flet-dev/examples/tree/main/python/apps/studio-gallery/{self.file_name}",
+                                url_target="_blank",
+                            )
+                        ],
+                    ),
+                    e.control.view,
+                ],
+            )
+        )
+        e.control.page.update()
+
+
 def main(page: ft.Page):
-    # Open directory dialog
-    def get_directory_result(e: ft.FilePickerResultEvent):
-        fl_directory.value = e.path if e.path else "Cancelled!"
-        fl_directory.update()
-
-    get_directory_dialog = ft.FilePicker(on_result=get_directory_result)
-    fl_directory = ft.Text()
-
-    # hide all dialogs in overlay
-    page.overlay.extend([get_directory_dialog])
-
-    def setup_directory(e):
-        complete = os.path.join(fl_directory.value, 'Complete')
-        wip = os.path.join(fl_directory.value, 'WIP')
-        cbu = os.path.join(fl_directory.value, 'Unmastered')
-        os.mkdir(complete)
-        os.mkdir(wip)
-        os.mkdir(cbu)
-        done = ft.Text(value=f"ATRACKTIVE has begun organizing your projects! 💪")
-        page.update()
-        page.add(ft.Column(width=1500,controls=[ft.Row([done], alignment="center"),],),)
-
-    # page.bgcolor = colors.BLACK
-    page.theme = ft.Theme(color_scheme_seed='red')
-    # page.theme = ft.Theme(
-    # color_scheme=ft.ColorScheme(
-    #     primary=ft.colors.BLUE,
-    #     primary_container=ft.colors.BLUE_200,
-    #     on_primary=ft.colors.INDIGO_900,
-#     ),
-# )
     page.add(
-        ft.Column(
-            width=1500,
+        ft.ListView(
             controls=[
-                ft.Row([ft.Text(value="Welcome! Select your FL Studio 'Projects' folder below, once complete ATRACKTIVE will begin organizing!", style="Medium")], alignment="center"),
-                        ft.Row([ft.Text(value="")]),
-
-                        ft.Row(
-            [
-                ft.ElevatedButton(
-                    "Select FL Studio Projects Folder",
-                    icon=ft.icons.FOLDER_OPEN,
-                    on_click=lambda _: get_directory_dialog.get_directory_path(),
-                    disabled=page.web,
+                AppTile(
+                    name="Setup",
+                    file_name="directory_setup.py",
+                    view=directory_setup.example(page),
+                    icon_name=ft.icons.SETTINGS,
                 ),
-            ],
-                alignment="center"
-        ),
-                ft.Row([fl_directory], alignment="center"),
-
-        ft.Row(
-            [
-                ft.ElevatedButton(
-                    "Get Started 👍",
-                    on_click=setup_directory,
-                    
-                    
-                ),
-            
-            ],
-                alignment="center"
-        ),
-              
-            ],
-        ),
+            ]
+        )
     )
 
-    page.title = "ATRACKTIVE"
-    page.navigation_bar = ft.NavigationBar(
-        destinations=[
-            ft.NavigationDestination(icon=ft.icons.SETTINGS, label="Setup"),
-            ft.NavigationDestination(icon=ft.icons.NOTES, label="Notes"),
-            ft.NavigationDestination(
-                icon=ft.icons.BAR_CHART_OUTLINED,
-                selected_icon=ft.icons.BAR_CHART_OUTLINED,
-                label="Stats",
-            ),
-        ]
-    )
-    page.add()
+    def view_pop(view):
+        page.views.pop()
+        top_view = page.views[0]
+        page.go(top_view.route)
+
+    page.on_view_pop = view_pop
+    page.window_width = 960
+    page.window_height = 540
+    page.update()
 
 
-ft.app(target=main)
+ft.app(target=main, assets_dir="assets")
