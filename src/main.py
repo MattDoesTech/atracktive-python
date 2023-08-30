@@ -1,4 +1,7 @@
 import directory_setup
+import notes
+import help
+import stats
 import flet as ft
 from flet import (
     ElevatedButton,
@@ -79,20 +82,20 @@ def main(page: ft.Page):
                 AppTile(
                     name = "Notes",
                     file_name="notes.py",
-                    view=directory_setup.example(page),
+                    view=notes.example(page),
                     icon_name=ft.icons.NOTE,         
                 ),
                 
                 AppTile(
                     name = "My Producer Stats",
                     file_name="stats.py",
-                    view=directory_setup.example(page),
+                    view=stats.example(page),
                     icon_name=ft.icons.PIE_CHART,   
                 ),
                 AppTile(
                     name = "Help",
                     file_name="help.py",
-                    view=directory_setup.example(page),
+                    view=help.example(page),
                     icon_name=ft.icons.HELP,
                 ),
                 img,

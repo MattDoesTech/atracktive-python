@@ -1,20 +1,6 @@
 import os
 import flet as ft
-from flet import (
-    ElevatedButton,
-    FilePicker,
-    FilePickerResultEvent,
-    Page,
-    Row,
-    Text,
-    icons,
-    Column,
-    Container,
-    colors,
-    border,
-    padding,
 
-)
 def example(page):
     done = ft.Row([ft.Text(value=""),], alignment="center")
     # Open directory dialog
