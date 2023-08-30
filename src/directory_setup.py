@@ -23,12 +23,12 @@ def example(page):
         fl_directory.update()
 
     get_directory_dialog = ft.FilePicker(on_result=get_directory_result)
-    fl_directory = ft.Text()
+    fl_directory = ft.Text(value="", color="white")
 
     # hide all dialogs in overlay
     page.overlay.extend([get_directory_dialog])
 
-    done = ft.Text()
+    done = ft.Text(value="", color="white")
 
     def setup_directory(e):
         complete = os.path.join(fl_directory.value, 'Complete')
@@ -38,35 +38,19 @@ def example(page):
         os.mkdir(wip)
         os.mkdir(cbu)
     
-        done.value = "ATRACKTIVE has begun organizing your projects! 💪"
+        done.value = "ATRACKTIVE has begun organizing your projects! 🎉"
         done.update()
         e.control.page.update()
-        
-
-        # done = ft.Text()
-    
-
-    # page.update()
-    # page.add(ft.Column(controls=[ft.Row([done], alignment="center"),],),)
-        # page.update()
-        # page.add(
-        #     ft.Column(
-        #         controls=[
-        #             ft.Row([done], alignment="center"),
-        #         ],
-        #     ),
-        # )
-    
-
 
     page.theme = ft.Theme(color_scheme_seed='red')
+    # page.bgcolor = "#1B2636"
 
     return ft.Column(
             width=1500,
             expand=True,
             alignment=ft.MainAxisAlignment.CENTER,
             controls=[
-                ft.Row([ft.Text(value="Welcome! Select your FL Studio 'Projects' folder below, once complete ATRACKTIVE will begin organizing!", style="Medium")], alignment="center"),
+                ft.Row([ft.Text(value="Welcome! Select your FL Studio 'Projects' folder below, once complete ATRACKTIVE will begin organizing!", style="Medium", color="white")], alignment="center"),
                 ft.Row(
             [
                 ft.ElevatedButton(
@@ -102,10 +86,13 @@ def example(page):
     
 
 def main(page: ft.Page):
+    # page.bgcolor = "#1B2636"
     page.title = "Setup"
     page.window_width = 960
     page.window_height = 540
+    
     page.add(example(page))
+    page.update()
 
 if __name__ == "__main__":
     ft.app(target=main)
