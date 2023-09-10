@@ -1,5 +1,7 @@
-import directory_setup
+from directory_setup import Setup
+import randomizer
 import notes
+from notes import OnMyWatch
 import help
 import stats
 import flet as ft
@@ -76,27 +78,33 @@ def main(page: ft.Page):
                 AppTile(
                     name = "Setup",
                     file_name="directory_setup.py",
-                    view=directory_setup.example(page),
-                    icon_name=ft.icons.SETTINGS,   
+                    view=Setup.example(page),
+                    icon_name=ft.icons.SETTINGS_SUGGEST,   
                 ),
                 AppTile(
                     name = "Notes",
                     file_name="notes.py",
                     view=notes.example(page),
-                    icon_name=ft.icons.NOTE,         
+                    icon_name=ft.icons.EDIT_NOTE,         
                 ),
                 
                 AppTile(
                     name = "My Producer Stats",
                     file_name="stats.py",
                     view=stats.example(page),
-                    icon_name=ft.icons.PIE_CHART,   
+                    icon_name=ft.icons.BAR_CHART,   
+                ),
+                AppTile(
+                    name = "Randomizer",
+                    file_name="randomizer.py",
+                    view=randomizer.example(page),
+                    icon_name=ft.icons.SHUFFLE,   
                 ),
                 AppTile(
                     name = "Help",
                     file_name="help.py",
                     view=help.example(page),
-                    icon_name=ft.icons.HELP,
+                    icon_name=ft.icons.QUESTION_MARK_OUTLINED,
                 ),
                 img,
             ],
@@ -125,6 +133,8 @@ def main(page: ft.Page):
     #         alignment=ft.MainAxisAlignment.CENTER, controls=[(img)]))
 
     page.update()
+    watch = OnMyWatch()
+    watch.run()
 
 
 ft.app(target=main, assets_dir="../assets")
